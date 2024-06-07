@@ -1,6 +1,5 @@
 using Api.Controllers;
 using Application.Logic;
-using Application.Processes;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
