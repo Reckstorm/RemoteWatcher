@@ -1,4 +1,4 @@
-using System.Text.Json;
+using System.Net;
 using API.Extensions;
 using API.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -14,16 +14,13 @@ builder.Services.AddControllers(opt =>
     opt.Filters.Add(new AuthorizeFilter(policy));
 });
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddHttpClient();
+var currentIP = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString();
 
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+if (currentIP != null && !string.IsNullOrEmpty(currentIP))
+    builder.WebHost.UseUrls($"http://{currentIP}:80");
+
+builder.Services.AddApplicationServices();
 builder.Services.AddAuthorizationServices(builder.Configuration);
-
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Application.RProcesses.List.Handler).Assembly));
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -46,7 +43,7 @@ try
     app.Lifetime.ApplicationStarted.Register(async () =>
     {
         var client = _clientFactory.CreateClient();
-        var url = Environment.GetEnvironmentVariable("ASPNETCORE_URLS").Split(';')[0];
+        var url = app.Urls.FirstOrDefault();
         string token = new TokenService(builder.Configuration).CreateToken(new Domain.User());
 
         var request = new HttpRequestMessage(HttpMethod.Post, $"{url}/api/Logic/start");

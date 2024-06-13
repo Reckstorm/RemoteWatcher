@@ -5,18 +5,19 @@ using MediatR;
 
 namespace Application.RProcesses
 {
-    public class Delete
+    public class EditAll
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public string ProcessName { get; set; }
+            public RProcessDTO Boundaries { get; set; }
         }
 
-        public class CommandValidator: AbstractValidator<Command>
+        public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
-                RuleFor(x => x.ProcessName).NotEmpty();
+                RuleFor(x => x.Boundaries.StartTime).GreaterThanOrEqualTo(TimeOnly.Parse("00:00:00"));
+                RuleFor(x => x.Boundaries.EndTime).LessThanOrEqualTo(TimeOnly.Parse("23:59:59"));
             }
         }
 
@@ -26,15 +27,14 @@ namespace Application.RProcesses
             {
                 var rules = await RegistryAgent.GetRules();
 
-                if (rules == string.Empty) return Result<Unit>.Failure("There is nothing to delete");
+                var list = new List<RProcess>();
 
-                var list = JsonSerializer.Deserialize<List<RProcess>>(rules);
+                if (rules != null && !rules.Equals("")) list = JsonSerializer.Deserialize<List<RProcess>>(rules);
 
-                var item = list.FirstOrDefault(p => p.ProcessName == request.ProcessName);
-
-                var res = list.Remove(item);
-
-                if (!res) return Result<Unit>.Failure("There is nothing to delete");
+                list.ForEach(r => {
+                    r.BlockStartTime = request.Boundaries.StartTime;
+                    r.BlockEndtTime = request.Boundaries.EndTime;
+                });
 
                 await RegistryAgent.SetRules(JsonSerializer.Serialize(list));
 

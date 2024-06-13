@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Domain;
+using FluentValidation;
 using MediatR;
 
 namespace Application.RProcesses;
@@ -10,6 +11,15 @@ public class Edit
     {
         public string ProcessName { get; set; }
         public RProcess Process { get; set; }
+    }
+
+    public class CommandValidator : AbstractValidator<Command>
+    {
+        public CommandValidator()
+        {
+            RuleFor(x => x.ProcessName).NotEmpty();
+            RuleFor(x => x.Process).SetValidator(new RProcessValidator());
+        }
     }
 
     public class Handler : IRequestHandler<Command, Result<Unit>>

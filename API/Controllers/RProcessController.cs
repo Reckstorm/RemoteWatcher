@@ -1,3 +1,4 @@
+using System.Reflection.Metadata.Ecma335;
 using Application.RProcesses;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
@@ -39,5 +40,11 @@ public class RProcessController : BaseApiController
     public async Task<IActionResult> EditProcess(string processName, RProcess process)
     {
         return HandleResult(await Mediator.Send(new Edit.Command { ProcessName = processName, Process = process }));
+    }
+
+    [HttpPut("editAll")]
+    public async Task<IActionResult> EditAll(RProcessDTO Boundaries)
+    {
+        return HandleResult(await Mediator.Send(new EditAll.Command { Boundaries = Boundaries }));
     }
 }
