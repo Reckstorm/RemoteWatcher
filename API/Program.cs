@@ -1,5 +1,6 @@
 using System.Net;
 using API.Extensions;
+using API.Middleware;
 using API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -21,9 +22,14 @@ if (currentIP != null && !string.IsNullOrEmpty(currentIP))
 
 builder.Services.AddApplicationServices();
 builder.Services.AddAuthorizationServices(builder.Configuration);
+
+builder.Services.AddWindowsService();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseMiddleware<ExceptionMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
