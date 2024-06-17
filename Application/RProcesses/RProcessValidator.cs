@@ -9,8 +9,8 @@ namespace Application.RProcesses
         public RProcessValidator()
         {
             RuleFor(x => x.ProcessName).NotEmpty();
-            RuleFor(x => x.BlockStartTime).GreaterThanOrEqualTo(TimeOnly.Parse("00:00:00"));
-            RuleFor(x => x.BlockEndtTime).LessThanOrEqualTo(TimeOnly.Parse("23:59:59"));
+            RuleFor(x => x.BlockStartTime).GreaterThanOrEqualTo(TimeOnly.Parse("00:00:00")).LessThanOrEqualTo(x => x.BlockEndtTime);
+            RuleFor(x => x.BlockEndtTime).LessThanOrEqualTo(TimeOnly.Parse("23:59:59")).GreaterThanOrEqualTo(x => x.BlockStartTime);
         }  
     }
 }
