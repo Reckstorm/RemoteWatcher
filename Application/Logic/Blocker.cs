@@ -77,8 +77,10 @@ public class Blocker
                         {
                             if (p.ProcessName.Equals(AppDomain.CurrentDomain.FriendlyName)) continue;
                             if (p.ProcessName.Equals(process.ProcessName)
-                            && TimeOnly.Parse(DateTime.Now.ToLongTimeString()) <= p.BlockEndtTime
-                            && TimeOnly.Parse(DateTime.Now.ToLongTimeString()) >= p.BlockStartTime)
+                            && ((TimeOnly.Parse(DateTime.Now.ToLongTimeString()) <= p.BlockEndtTime
+                            && TimeOnly.Parse(DateTime.Now.ToLongTimeString()) >= p.BlockStartTime) 
+                            || (TimeOnly.Parse(DateTime.Now.ToLongTimeString()) >= p.BlockEndtTime
+                            && p.BlockStartTime >= p.BlockEndtTime)))
                             {
                                 foreach (Process temp in Process.GetProcessesByName(p.ProcessName))
                                 {

@@ -16,8 +16,8 @@ namespace Application.RProcesses
         {
             public CommandValidator()
             {
-            RuleFor(x => x.Boundaries.StartTime).GreaterThanOrEqualTo(TimeOnly.Parse("00:00:00")).LessThanOrEqualTo(x => x.Boundaries.EndTime);
-            RuleFor(x => x.Boundaries.EndTime).LessThanOrEqualTo(TimeOnly.Parse("23:59:59")).GreaterThanOrEqualTo(x => x.Boundaries.StartTime);
+            RuleFor(x => x.Boundaries.StartTime).GreaterThanOrEqualTo(TimeOnly.Parse("00:00:00")).LessThanOrEqualTo(TimeOnly.Parse("23:59:59"));
+            RuleFor(x => x.Boundaries.EndTime).LessThanOrEqualTo(TimeOnly.Parse("23:59:59")).GreaterThanOrEqualTo(TimeOnly.Parse("00:00:00"));
             }
         }
 
