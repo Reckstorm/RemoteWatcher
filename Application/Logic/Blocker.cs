@@ -75,12 +75,12 @@ public class Blocker
                     {
                         foreach (RProcess p in _rProcessList)
                         {
+                            TimeOnly now = TimeOnly.Parse(DateTime.Now.ToLongTimeString());
                             if (p.ProcessName.Equals(AppDomain.CurrentDomain.FriendlyName)) continue;
                             if (p.ProcessName.Equals(process.ProcessName)
-                            && ((TimeOnly.Parse(DateTime.Now.ToLongTimeString()) <= p.BlockEndtTime
-                            && TimeOnly.Parse(DateTime.Now.ToLongTimeString()) >= p.BlockStartTime) 
-                            || (TimeOnly.Parse(DateTime.Now.ToLongTimeString()) >= p.BlockEndtTime
-                            && p.BlockStartTime >= p.BlockEndtTime)))
+                            && ((now <= p.BlockEndTime && now >= p.BlockStartTime) 
+                            || (now >= p.BlockStartTime && p.BlockStartTime >= p.BlockEndTime)
+                            || (now <= p.BlockEndTime && p.BlockEndTime <= p.BlockStartTime)))
                             {
                                 foreach (Process temp in Process.GetProcessesByName(p.ProcessName))
                                 {

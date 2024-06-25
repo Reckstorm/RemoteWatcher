@@ -13,25 +13,25 @@ public class RProcess
         set { lock (locker) _blockStartTime = value; }
     }
 
-    private TimeOnly _blockEndtTime;
+    private TimeOnly _blockEndTime;
 
-    public TimeOnly BlockEndtTime
+    public TimeOnly BlockEndTime
     {
-        get { lock (locker) return _blockEndtTime; }
-        set { lock (locker) _blockEndtTime = value; }
+        get { lock (locker) return _blockEndTime; }
+        set { lock (locker) _blockEndTime = value; }
     }
 
     public RProcess()
     {
         BlockStartTime = TimeOnly.Parse("00:00:00");
-        BlockEndtTime = TimeOnly.Parse("23:59:59");
+        BlockEndTime = TimeOnly.Parse("23:59:59");
         ProcessName = string.Empty;
     }
 
     public RProcess(string proc)
     {
         BlockStartTime = TimeOnly.Parse("00:00:00");
-        BlockEndtTime = TimeOnly.Parse("23:59:59");
+        BlockEndTime = TimeOnly.Parse("23:59:59");
         ProcessName = proc;
     }
 
@@ -39,6 +39,6 @@ public class RProcess
     {
         ProcessName = proc;
         BlockStartTime = blockStartTime;
-        BlockEndtTime = blockEndtTime;
+        BlockEndTime = blockEndtTime;
     }
 }

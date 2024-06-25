@@ -33,7 +33,7 @@ namespace Application.RProcesses
 
                 list.ForEach(r => {
                     r.BlockStartTime = request.Boundaries.StartTime;
-                    r.BlockEndtTime = request.Boundaries.EndTime;
+                    r.BlockEndTime = request.Boundaries.EndTime;
                 });
 
                 await RegistryAgent.SetRules(JsonSerializer.Serialize(list));
